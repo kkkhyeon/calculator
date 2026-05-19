@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>나만의 계산기</title>
+    <style>
+        @media (max-width:540px) {
+            div.empty      { display: none; }
+            div.vertical   { display: block; }
+            div.horizontal { display: none; }
+        }
+        @media (max-width:360px) {
+            div.empty      { display: block; }
+            div.vertical   { display: none; }
+            div.horizontal { display: none; }
+        }
+        @media (min-width:541px) {
+            div.empty      { display: none; }
+            div.vertical   { display: none; }
+            div.horizontal { display: block; }
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        div.empty {
+            color: red;
+            font-size: 16px;
+            padding: 20px;
+        }
+
+        .calc-wrap {
+            background: #d4d4d4;
+            border: 1px solid #aaa;
+            border-radius: 6px;
+            padding: 10px;
+        }
+
+        td.result {
+            height: 80px;
+            background: white;
+            border: 1px solid #aaa;
+            font-size: 30px;
+            text-align: right;
+            padding: 0 10px;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 70px;
+            height: 55px;
+            font-size: 25px;
+            background: #c9cccd;
+            border: 1px solid #bbb;
+            border-radius: 2px;
+            cursor: pointer;
+        }
+
+        button.num {
+            background: #ebebeb;
+            font-weight: bold;
+        }
+
+        button:hover { background: #c8c8c8; }
+
+        button.op {
+            background: #fbcb05;
+            border-color: #fbcb05;
+            font-weight: bold;
+        }
+
+        button.op:hover { background: #e09310; }
+
+        table {
+            border-collapse: separate;
+            border-spacing: 5px;
+        }
+
+        td { padding: 0; }
+
+        .logo-bar {
+            text-align: center;
+            margin-top: 8px;
+        }
+        .logo-bar .copy {
+            font-size: 12px;
+            color: #555;
+            margin-top: 2px;
+        }
+        .logo-bar .copy strong { color: #1a6fba; }
+    </style>
+</head>
+
+<body>
+
+    <div class="empty">
+        <p>표시할 수 없습니다. 화면의 크기를 키워주세요!</p>
+    </div>
+
+    <!-- ════════ 세로 레이아웃 (361~540px) ════════ -->
+    <div class="vertical">
+        <div class="calc-wrap">
+            <table width="340">
+                <tr>
+                    <td colspan="4" class="result" align="right">
+                        <span id="display1">0</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td><button></button></td>
+                    <td><button></button></td>
+                    <td><button></button></td>
+                    <td><button></button></td>
+                </tr>
+                <tr>
+                    <td><button onclick="ceButton()">CE</button></td>
+                    <td><button onclick="sqrtButton()">√x</button></td>
+                    <td><button onclick="percentButton()">%</button></td>
+                    <td><button class="op" onclick="divideButton()">÷</button></td>
+                </tr>
+                <tr>
+                    <td><button class="num" onclick="numberButton(7)">7</button></td>
+                    <td><button class="num" onclick="numberButton(8)">8</button></td>
+                    <td><button class="num" onclick="numberButton(9)">9</button></td>
+                    <td><button class="op" onclick="multiplyButton()">×</button></td>
+                </tr>
+                <tr>
+                    <td><button class="num" onclick="numberButton(4)">4</button></td>
+                    <td><button class="num" onclick="numberButton(5)">5</button></td>
+                    <td><button class="num" onclick="numberButton(6)">6</button></td>
+                    <td><button class="op" onclick="minusButton()">-</button></td>
+                </tr>
+                <tr>
+                    <td><button class="num" onclick="numberButton(1)">1</button></td>
+                    <td><button class="num" onclick="numberButton(2)">2</button></td>
+                    <td><button class="num" onclick="numberButton(3)">3</button></td>
+                    <td><button class="op" onclick="plusButton()">+</button></td>
+                </tr>
+                <tr>
+                    <td><button class="num" onclick="numberButton(0)">0</button></td>
+                    <td><button class="num" onclick="dotButton()">.</button></td>
+                    <td><button class="num" onclick="signButton()">+/-</button></td>
+                    <td><button class="op" onclick="equalButton()">=</button></td>
+                </tr>
+                <tr>
+                    <td><button onclick="piButton()">π</button></td>
+                    <td><button onclick="squareButton()">x²</button></td>
+                    <td><button onclick="r2Button()">R2</button></td>
+                    <td><button onclick="r0Button()">R0</button></td>
+                </tr>
+            </table>
+            <div class="logo-bar">
+                <div class="copy"><strong>20253320</strong> 양현지</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ════════ 가로 레이아웃 (≥541px) ════════ -->
+    <div class="horizontal">
+        <div class="calc-wrap">
+            <table width="520">
+                <tr>
+                    <td colspan="7" class="result" align="right">
+                        <span id="display2">0</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td><button></button></td>
+                    <td><button></button></td>
+                    <td><button class="num" onclick="numberButton(7)">7</button></td>
+                    <td><button class="num" onclick="numberButton(8)">8</button></td>
+                    <td><button class="num" onclick="numberButton(9)">9</button></td>
+                    <td><button class="op" onclick="divideButton()">÷</button></td>
+                    <td><button onclick="r2Button()">R2</button></td>
+                </tr>
+                <tr height="80">
+                    <td><button></button></td>
+                    <td><button></button></td>
+                    <td><button class="num" onclick="numberButton(4)">4</button></td>
+                    <td><button class="num" onclick="numberButton(5)">5</button></td>
+                    <td><button class="num" onclick="numberButton(6)">6</button></td>
+                    <td><button class="op" onclick="multiplyButton()">×</button></td>
+                    <td><button onclick="r0Button()">R0</button></td>
+                </tr>
+                <tr height="80">
+                    <td><button onclick="piButton()">π</button></td>
+                    <td><button onclick="squareButton()">x²</button></td>
+                    <td><button class="num" onclick="numberButton(1)">1</button></td>
+                    <td><button class="num" onclick="numberButton(2)">2</button></td>
+                    <td><button class="num" onclick="numberButton(3)">3</button></td>
+                    <td><button class="op" onclick="minusButton()">-</button></td>
+                    <td><button onclick="ceButton()">CE</button></td>
+                </tr>
+                <tr height="80">
+                    <td><button onclick="sqrtButton()">√x</button></td>
+                    <td><button onclick="percentButton()">%</button></td>
+                    <td><button class="num" onclick="numberButton(0)">0</button></td>
+                    <td><button class="num" onclick="dotButton()">.</button></td>
+                    <td><button class="num" onclick="signButton()">+/-</button></td>
+                    <td><button class="op" onclick="plusButton()">+</button></td>
+                    <td><button class="op" onclick="equalButton()">=</button></td>
+                </tr>
+            </table>
+            <div class="logo-bar">
+                <div class="copy"><strong>20253320</strong> 양현지</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let curValue = 0;
+        let operator = '';
+
+        // 현재 보이는 display ID 반환
+        function dispId() {
+            if (document.getElementById('display1').offsetParent !== null) return 'display1';
+            return 'display2';
+        }
+
+        // 숫자 버튼
+        function numberButton(num) {
+            if (document.getElementById(dispId()).innerHTML == '0') {
+                document.getElementById(dispId()).innerHTML = num;
+            } else {
+                document.getElementById(dispId()).innerHTML += num;
+            }
+        }
+
+        // 소수점 버튼
+        function dotButton() {
+            if (document.getElementById(dispId()).innerHTML.indexOf('.') === -1) {
+                document.getElementById(dispId()).innerHTML += '.';
+            }
+        }
+
+        // + 버튼
+        function plusButton() {
+            curValue = parseFloat(document.getElementById(dispId()).innerHTML);
+            document.getElementById(dispId()).innerHTML = 0;
+            operator = '+';
+        }
+
+        // - 버튼
+        function minusButton() {
+            curValue = parseFloat(document.getElementById(dispId()).innerHTML);
+            document.getElementById(dispId()).innerHTML = 0;
+            operator = '-';
+        }
+
+        // × 버튼
+        function multiplyButton() {
+            curValue = parseFloat(document.getElementById(dispId()).innerHTML);
+            document.getElementById(dispId()).innerHTML = 0;
+            operator = '*';
+        }
+
+        // ÷ 버튼
+        function divideButton() {
+            curValue = parseFloat(document.getElementById(dispId()).innerHTML);
+            document.getElementById(dispId()).innerHTML = 0;
+            operator = '/';
+        }
+
+        // = 버튼
+        function equalButton() {
+            if (operator == '+') {
+                curValue += parseFloat(document.getElementById(dispId()).innerHTML);
+                document.getElementById(dispId()).innerHTML = curValue;
+            } else if (operator == '-') {
+                curValue -= parseFloat(document.getElementById(dispId()).innerHTML);
+                document.getElementById(dispId()).innerHTML = curValue;
+            } else if (operator == '*') {
+                curValue *= parseFloat(document.getElementById(dispId()).innerHTML);
+                document.getElementById(dispId()).innerHTML = curValue;
+            } else if (operator == '/') {
+                curValue /= parseFloat(document.getElementById(dispId()).innerHTML);
+                document.getElementById(dispId()).innerHTML = curValue;
+            } else {
+            }
+            operator = '';
+        }
+
+        // CE 버튼
+        function ceButton() {
+            document.getElementById(dispId()).innerHTML = '0';
+            curValue = 0;
+            operator = '';
+        }
+
+        // +/- 버튼
+        function signButton() {
+            document.getElementById(dispId()).innerHTML =
+                parseFloat(document.getElementById(dispId()).innerHTML) * -1;
+        }
+
+        // % 버튼
+        function percentButton() {
+            document.getElementById(dispId()).innerHTML =
+                parseFloat(document.getElementById(dispId()).innerHTML) / 100;
+        }
+
+        // √x 버튼
+        function sqrtButton() {
+            document.getElementById(dispId()).innerHTML =
+                Math.sqrt(parseFloat(document.getElementById(dispId()).innerHTML));
+        }
+
+        // x² 버튼
+        function squareButton() {
+            var v = parseFloat(document.getElementById(dispId()).innerHTML);
+            document.getElementById(dispId()).innerHTML = v * v;
+        }
+
+        // π 버튼
+        function piButton() {
+            document.getElementById(dispId()).innerHTML = Math.PI;
+        }
+
+        // R2 버튼
+        function r2Button() {
+            document.getElementById(dispId()).innerHTML =
+                parseFloat(document.getElementById(dispId()).innerHTML).toFixed(2);
+        }
+
+        // R0 버튼
+        function r0Button() {
+            document.getElementById(dispId()).innerHTML =
+                Math.round(parseFloat(document.getElementById(dispId()).innerHTML));
+        }
+    </script>
+
+</body>
+</html>

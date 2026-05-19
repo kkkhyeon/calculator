@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calc2_20253320양현지</title>
+    <style>
+        @media (max-width:540px) {
+            div.empty { display: none; }
+            div.vertical { display: block; }
+            div.horizontal { display: none; }
+        }
+
+        @media (max-width:360px) {
+            div.empty { display: block; }
+            div.vertical { display: none; }
+            div.horizontal { display: none; }
+        }
+
+        @media (min-width:541px) {
+            div.empty { display: none; }
+            div.vertical { display: none; }
+            div.horizontal { display: block; }
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f0f0f0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px 0;
+        }
+
+        div.empty {
+            color: red;
+            font-size: 16px;
+            padding: 20px;
+        }
+
+        .calc-wrap {
+            background: #d4d4d4;
+            border: 1px solid #aaa;
+            border-radius: 6px;
+            padding: 10px;
+        }
+
+        td.result {
+            height: 80px;
+            background: white;
+            border: 1px solid #aaa;
+            font-size: 30px;
+            text-align: right;
+            padding: 0 10px;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 70px;
+            height: 55px;
+            font-size: 25px;
+            background: #c9cccd;
+            border: 1px solid #bbb;
+            border-radius: 2px;
+            cursor: pointer;
+        }
+
+        button.num {
+            background: #ebebeb;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background: #c8c8c8;
+        }
+
+        button.op {
+            background: #fbcb05;
+            border-color: #fbcb05;
+            font-weight: bold;
+        }
+
+        button.op:hover {
+            background: #e09310;
+        }
+
+        table {
+            border-collapse: separate;
+            border-spacing: 5px;
+        }
+
+        td {
+            padding: 0;
+        }
+
+        .logo-bar {
+            text-align: center;
+            margin-top: 8px;
+        }
+
+        .logo-bar .copy {
+            font-size: 12px;
+            color: #555;
+            margin-top: 2px;
+        }
+
+        .logo-bar .copy strong {
+            color: #1a6fba;
+        }
+
+        /* 설명 영역 */
+        .desc-wrap {
+            margin-top: 20px;
+            background: #fff;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            padding: 16px 20px;
+            font-size: 14px;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .desc-wrap h2 {
+            font-size: 15px;
+            margin: 0 0 12px 0;
+            border-bottom: 2px solid #fbcb05;
+            padding-bottom: 6px;
+        }
+
+        .desc-wrap table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        .desc-wrap th {
+            background: #f5f5f5;
+            border: 1px solid #ddd;
+            padding: 7px 10px;
+            text-align: left;
+        }
+
+        .desc-wrap td {
+            border: 1px solid #ddd;
+            padding: 7px 10px;
+            vertical-align: top;
+        }
+
+        .desc-wrap .btn-label {
+            font-weight: bold;
+            font-size: 15px;
+            color: #1a6fba;
+            white-space: nowrap;
+        }
+
+        .desc-wrap .example {
+            display: block;
+            color: #888;
+            font-size: 12px;
+            margin-top: 3px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="empty">
+        <p>표시할 수 없습니다. 화면의 크기를 키워주세요!</p>
+    </div>
+
+    <!-- ════════ 세로 레이아웃 (361~540px) ════════ -->
+    <div class="vertical">
+        <div class="calc-wrap">
+            <table width="340">
+                <tr>
+                    <td colspan="4" class="result" align="right">
+                        <span id="display1">0</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td><button id="xpow1">x^y</button></td>
+                    <td><button id="log1">log</button></td>
+                    <td><button id="ln1">ln</button></td>
+                    <td><button id="e1">e</button></td>
+                </tr>
+                <tr>
+                    <td><button id="ce1">CE</button></td>
+                    <td><button id="sqrt1">√x</button></td>
+                    <td><button id="percent1">%</button></td>
+                    <td><button class="op" id="divide1">÷</button></td>
+                </tr>
+                <tr>
+                    <td><button class="num" id="n7v">7</button></td>
+                    <td><button class="num" id="n8v">8</button></td>
+                    <td><button class="num" id="n9v">9</button></td>
+                    <td><button class="op" id="multiply1">×</button></td>
+                </tr>
+                <tr>
+                    <td><button class="num" id="n4v">4</button></td>
+                    <td><button class="num" id="n5v">5</button></td>
+                    <td><button class="num" id="n6v">6</button></td>
+                    <td><button class="op" id="minus1">-</button></td>
+                </tr>
+                <tr>
+                    <td><button class="num" id="n1v">1</button></td>
+                    <td><button class="num" id="n2v">2</button></td>
+                    <td><button class="num" id="n3v">3</button></td>
+                    <td><button class="op" id="plus1">+</button></td>
+                </tr>
+                <tr>
+                    <td><button class="num" id="n0v">0</button></td>
+                    <td><button class="num" id="dot1">.</button></td>
+                    <td><button class="num" id="sign1">+/-</button></td>
+                    <td><button class="op" id="equal1">=</button></td>
+                </tr>
+                <tr>
+                    <td><button id="pi1">π</button></td>
+                    <td><button id="square1">x²</button></td>
+                    <td><button id="r2v">R2</button></td>
+                    <td><button id="r0v">R0</button></td>
+                </tr>
+            </table>
+            <div class="logo-bar">
+                <div class="copy"><strong>20253320</strong> 양현지</div>
+            </div>
+        </div>
+
+        <!-- 세로 설명 -->
+        <div class="desc-wrap" style="width:340px; box-sizing:border-box;">
+            <h2>추가 버튼 기능 설명</h2>
+            <table>
+                <tr>
+                    <th>버튼</th>
+                    <th>기능</th>
+                </tr>
+                <tr>
+                    <td class="btn-label">x^y</td>
+                    <td>
+                        <strong>거듭제곱 (Power)</strong><br>
+                        x를 밑, y를 지수로 계산합니다.<br>
+                        x 입력 → x^y 클릭 → y 입력 → = 클릭
+                        <span class="example">예) 2 x^y 10 = → 1024 &nbsp;|&nbsp; 3 x^y 3 = → 27</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="btn-label">log</td>
+                    <td>
+                        <strong>상용로그 (log₁₀)</strong><br>
+                        현재 값의 밑이 10인 로그값을 즉시 계산합니다.<br>
+                        10^y = x 를 만족하는 y를 구합니다.
+                        <span class="example">예) 1000 log → 3 &nbsp;|&nbsp; 100 log → 2</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="btn-label">ln</td>
+                    <td>
+                        <strong>자연로그 (logₑ)</strong><br>
+                        현재 값의 밑이 자연상수 e인 로그값을 즉시 계산합니다.<br>
+                        e^y = x 를 만족하는 y를 구합니다.
+                        <span class="example">예) 1 ln → 0 &nbsp;|&nbsp; e ln → 1 &nbsp;|&nbsp; 100 ln → 4.605...</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="btn-label">e</td>
+                    <td>
+                        <strong>자연상수 e (Euler's Number)</strong><br>
+                        자연상수 e ≈ 2.71828을 디스플레이에 입력합니다.<br>
+                        자연로그의 밑으로, 지수 성장·감쇠에 사용됩니다.
+                        <span class="example">예) e x^y 2 = → e² ≈ 7.389</span>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <!-- ════════ 가로 레이아웃 (≥541px) ════════ -->
+    <div class="horizontal">
+        <div class="calc-wrap">
+            <table width="520">
+                <tr>
+                    <td colspan="7" class="result" align="right">
+                        <span id="display2">0</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td><button id="xpow2">x^y</button></td>
+                    <td><button id="log2">log</button></td>
+                    <td><button class="num" id="n7h">7</button></td>
+                    <td><button class="num" id="n8h">8</button></td>
+                    <td><button class="num" id="n9h">9</button></td>
+                    <td><button class="op" id="divide2">÷</button></td>
+                    <td><button id="r2h">R2</button></td>
+                </tr>
+                <tr height="80">
+                    <td><button id="ln2">ln</button></td>
+                    <td><button id="e2">e</button></td>
+                    <td><button class="num" id="n4h">4</button></td>
+                    <td><button class="num" id="n5h">5</button></td>
+                    <td><button class="num" id="n6h">6</button></td>
+                    <td><button class="op" id="multiply2">×</button></td>
+                    <td><button id="r0h">R0</button></td>
+                </tr>
+                <tr height="80">
+                    <td><button id="pi2">π</button></td>
+                    <td><button id="square2">x²</button></td>
+                    <td><button class="num" id="n1h">1</button></td>
+                    <td><button class="num" id="n2h">2</button></td>
+                    <td><button class="num" id="n3h">3</button></td>
+                    <td><button class="op" id="minus2">-</button></td>
+                    <td><button id="ce2">CE</button></td>
+                </tr>
+                <tr height="80">
+                    <td><button id="sqrt2">√x</button></td>
+                    <td><button id="percent2">%</button></td>
+                    <td><button class="num" id="n0h">0</button></td>
+                    <td><button class="num" id="dot2">.</button></td>
+                    <td><button class="num" id="sign2">+/-</button></td>
+                    <td><button class="op" id="plus2">+</button></td>
+                    <td><button class="op" id="equal2">=</button></td>
+                </tr>
+            </table>
+            <div class="logo-bar">
+                <div class="copy"><strong>20253320</strong> 양현지</div>
+            </div>
+        </div>
+
+        <!-- 가로 설명 -->
+        <div class="desc-wrap" style="width:540px; box-sizing:border-box;">
+            <h2>추가 버튼 기능 설명</h2>
+            <table>
+                <tr>
+                    <th>버튼</th>
+                    <th>기능</th>
+                </tr>
+                <tr>
+                    <td class="btn-label">x^y</td>
+                    <td>
+                        <strong>거듭제곱 (Power)</strong><br>
+                        x를 밑, y를 지수로 계산합니다.<br>
+                        x 입력 → x^y 클릭 → y 입력 → = 클릭
+                        <span class="example">예) 2 x^y 10 = → 1024 &nbsp;|&nbsp; 3 x^y 3 = → 27</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="btn-label">log</td>
+                    <td>
+                        <strong>상용로그 (log₁₀)</strong><br>
+                        현재 값의 밑이 10인 로그값을 즉시 계산합니다.<br>
+                        10^y = x 를 만족하는 y를 구합니다.
+                        <span class="example">예) 1000 log → 3 &nbsp;|&nbsp; 100 log → 2</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="btn-label">ln</td>
+                    <td>
+                        <strong>자연로그 (logₑ)</strong><br>
+                        현재 값의 밑이 자연상수 e인 로그값을 즉시 계산합니다.<br>
+                        e^y = x 를 만족하는 y를 구합니다.
+                        <span class="example">예) 1 ln → 0 &nbsp;|&nbsp; e ln → 1 &nbsp;|&nbsp; 100 ln → 4.605...</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="btn-label">e</td>
+                    <td>
+                        <strong>자연상수 e (Euler's Number)</strong><br>
+                        자연상수 e ≈ 2.71828을 디스플레이에 입력합니다.<br>
+                        자연로그의 밑으로, 지수 성장·감쇠에 사용됩니다.
+                        <span class="example">예) e x^y 2 = → e² ≈ 7.389</span>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <script src ="calc2_main.js"></script>
+
+</body>
+
+</html>
